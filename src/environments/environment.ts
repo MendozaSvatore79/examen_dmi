@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  api: {
+    baseUrl: 'https://api.gamebrain.co/v1',
+    gamesSuggestionsPath: '/games/suggestions',
+    apiKey: '1d85f3ff8adc470d8af8091bd8fd0cf4',
+    apiKeyParamName: 'api-key',
+    useHeader: false
+  }
 };
 
 /*

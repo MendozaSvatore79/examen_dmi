@@ -1,0 +1,28 @@
+<ng-container *ngIf="!loading; else skeleton">
+  <ion-card class="game-card" *ngIf="game">
+    <div class="thumb-wrapper">
+      <img [src]="getImage()" [alt]="getName()" loading="lazy" />
+      <div class="gradient"></div>
+      <div class="badge discount" *ngIf="getDiscountPercent() > 0">-{{ getDiscountPercent() }}%</div>
+      <button class="wishlist" *ngIf="showWishlist" (click)="toggleWishlist()" [class.active]="wishlist" aria-label="Agregar a la lista de deseos">
+        <ion-icon name="heart"></ion-icon>
+      </button>
+      <div class="title">{{ getName() }}</div>
+    </div>
+    <div class="meta">
+      <span *ngIf="getYear()" class="year">📅 {{ getYear() }}</span>
+      <span *ngIf="getGenres()" class="genre">🎮 {{ getGenres() }}</span>
+      <span *ngIf="getRatingMean()" class="rating">★ {{ getRatingMean() }}</span>
+      <span *ngIf="getRatingCount()" class="count">({{ getRatingCount() }})</span>
+      <span *ngIf="isAdultOnly()" class="adult">18+</span>
+      <button class="external" *ngIf="game?.link" (click)="openLink($event)" aria-label="Abrir enlace externo">🔗 Ver</button>
+    </div>
+    <div class="price" *ngIf="showPrice && getFinalPrice()">
+      <span class="final" [class.free]="isFree()">{{ getFinalPrice() }}</span>
+      <span class="original" *ngIf="getDiscountPercent() > 0">{{ getOriginalPrice() }}</span>
+    </div>
+  </ion-card>
+</ng-container>
+<ng-template #skeleton>
+  <ion-skeleton-text animated class="skeleton"></ion-skeleton-text>
+</ng-template>

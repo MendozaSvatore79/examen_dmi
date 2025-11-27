@@ -15,5 +15,17 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'steam',
+    loadComponent: () => import('./steam/steam.page').then( m => m.SteamPage)
+  },
+  {
+    path: 'game/:id',
+    loadComponent: () => import('./game-detail/game-detail.page').then(m => m.GameDetailPage)
+  },
+  { 
+    path: 'games-clone',
+    loadComponent: () => import('./games-clone/games-clone.page').then( m => m.GamesClonePage)
+  },
 ];
 

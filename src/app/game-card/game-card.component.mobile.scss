@@ -1,0 +1,121 @@
+// Mobile-specific optimizations for game cards
+
+// Mobile touch optimization
+@media (max-width: 576px) {
+  ion-card.game-card {
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    // Optimize hover states for touch devices
+    @media (hover: none) and (pointer: coarse) {
+      &:hover {
+        transform: none;
+        .thumb-wrapper img {
+          transform: none;
+        }
+      }
+      &:active {
+        transform: scale(.97);
+        box-shadow: 0 2px 12px rgba(0,0,0,.9);
+      }
+    }
+
+    // Scale down text for mobile
+    .title {
+      font-size: .85rem;
+      padding: 10px 8px;
+      word-break: break-word;
+      hyphens: auto;
+    }
+
+    .badge.discount {
+      font-size: .65rem;
+      padding: 2px 5px 3px;
+    }
+
+    // Optimize wishlist button touch target
+    .wishlist {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      top: 6px;
+      right: 6px;
+      -webkit-tap-highlight-color: transparent;
+
+      ion-icon {
+        font-size: 1.4rem;
+      }
+    }
+
+    // Meta section mobile optimization
+    .meta {
+      padding: 8px;
+      gap: 5px;
+      font-size: .72rem;
+
+      .year,
+      .genre,
+      .rating,
+      .count {
+        font-size: .72rem;
+      }
+
+      .count {
+        font-size: .65rem;
+      }
+
+      .adult {
+        font-size: .6rem;
+        padding: 2px 5px;
+      }
+
+      .external {
+        padding: 8px 10px;
+        font-size: .7rem;
+        min-height: 40px;
+      }
+    }
+
+    // Price section mobile
+    .price {
+      padding: 8px;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-height: 40px;
+
+      .final {
+        font-size: 1rem;
+      }
+
+      .original {
+        font-size: .75rem;
+      }
+    }
+
+    // Performance optimization
+    &:hover .thumb-wrapper img {
+      will-change: auto;
+    }
+  }
+}
+
+// Reduce animations on low-end devices
+@media (prefers-reduced-motion: reduce) {
+  ion-card.game-card {
+    animation: none;
+    .meta {
+      animation: none;
+    }
+    .badge.discount {
+      animation: none;
+    }
+  }
+}
+
+// Safe area support for notched devices
+:host {
+  display: block;
+}

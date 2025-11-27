@@ -1,0 +1,141 @@
+<ion-header [translucent]="true" class="steam-header">
+  <ion-toolbar class="main-toolbar">
+    <div class="steam-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C7.4,22 3.55,18.92 2.36,14.73L6.19,16.31C6.45,17.6 7.6,18.58 8.97,18.58C10.53,18.58 11.8,17.31 11.8,15.75V15.62L15.2,13.19H15.28C17.36,13.19 19.05,11.5 19.05,9.42C19.05,7.34 17.36,5.65 15.28,5.65C13.2,5.65 11.5,7.34 11.5,9.42V9.47L9.13,12.93L8.97,12.92C8.38,12.92 7.83,13.1 7.38,13.41L2,11.2C2.43,6.05 6.73,2 12,2M8.28,17.17C9.08,17.5 10,17.13 10.33,16.33C10.66,15.53 10.28,14.62 9.5,14.29L8.22,13.76C8.71,13.58 9.26,13.57 9.78,13.79C10.31,14 10.72,14.41 10.93,14.94C11.15,15.46 11.15,16.04 10.93,16.57C10.5,17.63 9.31,18.16 8.25,17.73C7.73,17.5 7.31,17.11 7.03,16.61L8.28,17.17M15.28,11.53C14.03,11.53 13,10.5 13,9.25C13,8 14.03,6.97 15.28,6.97C16.53,6.97 17.56,8 17.56,9.25C17.56,10.5 16.53,11.53 15.28,11.53M15.28,7.53C14.33,7.53 13.56,8.31 13.56,9.25C13.56,10.19 14.33,10.97 15.28,10.97C16.22,10.97 17,10.19 17,9.25C17,8.31 16.22,7.53 15.28,7.53Z" />
+      </svg>
+      <span>TIENDA</span>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link active">Tienda</a>
+      <a class="nav-link" (click)="openExternalLink('https://steamcommunity.com/')">Comunidad</a>
+      <a class="nav-link" (click)="openExternalLink('https://store.steampowered.com/library')">Biblioteca</a>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Steam Juegos</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="featured-carousel" *ngIf="filteredGames.length > 0">
+    <div class="main-featured">
+      <div class="featured-image">
+        <img [src]="featuredGame.image" [alt]="featuredGame.name" />
+        <div class="featured-overlay"></div>
+      </div>
+      <div class="featured-content">
+        <div class="featured-header">
+          <div class="featured-tag">AHORA DISPONIBLE</div>
+          <div class="featured-platform">Windows</div>
+        </div>
+        <h2 class="featured-title">{{ featuredGame.name }}</h2>
+        <p class="featured-description">{{ featuredGame.genre || 'Videojuego de acción y aventura' }}</p>
+        <div class="featured-tags">
+          <span class="tag" *ngIf="featuredGame.genre">{{ featuredGame.genre }}</span>
+          <span class="tag">Acción</span>
+          <span class="tag">Aventura</span>
+        </div>
+        <div class="featured-footer">
+          <div class="featured-actions">
+            <ion-button class="btn-add-cart" (click)="openGame(featuredGame)">
+              Ver Juego
+            </ion-button>
+            <ion-button class="btn-wishlist" fill="outline">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+              </svg>
+            </ion-button>
+          </div>
+          <div class="featured-price" *ngIf="featuredGame.rating">
+            <div class="discount" *ngIf="featuredGame.rating.mean > 0.8">-{{ (100 - featuredGame.rating.mean * 100) | number:'1.0-0' }}%</div>
+            <div class="price-info">
+              <div class="original-price" *ngIf="featuredGame.rating.mean > 0.8">$59.99</div>
+              <div class="final-price">$49.99</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-thumbs">
+      <div class="thumb" *ngFor="let game of filteredGames.slice(0, 5); let i = index" 
+           [class.active]="i === featuredGameIndex" 
+           (click)="selectFeaturedGame(i)">
+        <img [src]="game.image" [alt]="game.name" />
+      </div>
+    </div>
+  </div>
+
+  <div class="store-controls">
+    <ion-searchbar placeholder="Buscar juegos" (ionInput)="onSearch($event)" [value]="query" debounce="0"></ion-searchbar>
+    <div class="filters-row">
+      <ion-segment (ionChange)="onGenreChange($event)" [value]="genreFilter" class="genre-segment">
+        <ion-segment-button value="all">Todos</ion-segment-button>
+        <ion-segment-button *ngFor="let g of genres" [value]="g">{{ g }}</ion-segment-button>
+      </ion-segment>
+      <ion-select (ionChange)="onSortChange($event)" [value]="sortBy" interface="popover" placeholder="Ordenar">
+        <ion-select-option value="default">Por defecto</ion-select-option>
+        <ion-select-option value="rating">Rating ⭐</ion-select-option>
+        <ion-select-option value="year">Año más reciente</ion-select-option>
+        <ion-select-option value="discount">Mayor descuento</ion-select-option>
+      </ion-select>
+    </div>
+  </div>
+
+  <div class="special-offers">
+    <div class="offers-tabs">
+      <div class="offer-tab" [class.active]="activeOfferTab === 'specials'" (click)="filterByCategory('specials')">
+        <div class="tab-icon">🔥</div>
+        <div class="tab-label">Ofertas Especiales</div>
+      </div>
+      <div class="offer-tab" [class.active]="activeOfferTab === 'bestsellers'" (click)="filterByCategory('bestsellers')">
+        <div class="tab-icon">⭐</div>
+        <div class="tab-label">Más Vendidos</div>
+      </div>
+      <div class="offer-tab" [class.active]="activeOfferTab === 'new'" (click)="filterByCategory('new')">
+        <div class="tab-icon">🆕</div>
+        <div class="tab-label">Novedades</div>
+      </div>
+      <div class="offer-tab" [class.active]="activeOfferTab === 'upcoming'" (click)="filterByCategory('upcoming')">
+        <div class="tab-icon">🎮</div>
+        <div class="tab-label">Próximamente</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h3>Explorar Catálogo</h3>
+    <div class="results-count">{{ filteredGames.length }} juegos</div>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="6" size-md="6" size-lg="4" size-xl="3" *ngFor="let game of filteredGames; trackBy: trackGame" (click)="openGame(game)" class="clickable">
+        <app-game-card [game]="game" [loading]="false" [showGenres]="true" [showPrice]="true" [showWishlist]="true"></app-game-card>
+      </ion-col>
+      <ng-container *ngIf="loading">
+        <ion-col size="12" size-sm="6" size-md="6" size-lg="4" size-xl="3" *ngFor="let s of skeletonSlots">
+          <app-game-card [loading]="true"></app-game-card>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" threshold="100px" [disabled]="loading">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más juegos..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

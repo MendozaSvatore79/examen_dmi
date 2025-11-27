@@ -1,0 +1,111 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ game?.name || 'Detalle Juego' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="hero" *ngIf="game; else skeleton">
+    <img [src]="getImage()" [alt]="game?.name" class="hero-bg" />
+    <div class="overlay"></div>
+    <div class="hero-content">
+      <h1>{{ game?.name }}</h1>
+      <div class="info-badges">
+        <span class="badge year" *ngIf="getYear()">📅 {{ getYear() }}</span>
+        <span class="badge genre" *ngIf="getGenreDisplay()">🎮 {{ getGenreDisplay() }}</span>
+        <span class="badge rating" *ngIf="getRatingMean()">★ {{ getRatingMean() }}</span>
+        <span class="badge votes" *ngIf="getRatingCount()">({{ getRatingCount() }} votos)</span>
+        <span class="badge adult" *ngIf="isAdultOnly()">🔞 18+</span>
+      </div>
+      <div class="actions">
+        <ion-button color="primary" (click)="back()">
+          <ion-icon slot="start" name="arrow-back"></ion-icon>
+          Volver
+        </ion-button>
+        <ion-button color="secondary" *ngIf="getExternalLink()" (click)="openExternalLink()">
+          <ion-icon slot="start" name="open-outline"></ion-icon>
+          Ver en sitio oficial
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="details" *ngIf="game">
+    <h2 *ngIf="getScreenshots().length">Capturas</h2>
+    <div class="screenshots" *ngIf="getScreenshots().length">
+      <swiper-container [slidesPerView]="1.2" [spaceBetween]="12" [centeredSlides]="true" [loop]="false">
+        <swiper-slide *ngFor="let shot of getScreenshots() | slice:0:10">
+          <ion-card class="screenshot-card">
+            <img [src]="getScreenshotUrl(shot)" [alt]="game?.name" loading="lazy" />
+          </ion-card>
+        </swiper-slide>
+      </swiper-container>
+    </div>
+    
+    <div class="game-info-section">
+      <h2>Información del juego</h2>
+      <ion-grid class="info-grid">
+        <ion-row>
+          <ion-col size="6" *ngIf="game?.id">
+            <div class="info-item">
+              <span class="label">ID:</span>
+              <span class="value">{{ game.id }}</span>
+            </div>
+          </ion-col>
+          <ion-col size="6" *ngIf="getYear()">
+            <div class="info-item">
+              <span class="label">Año:</span>
+              <span class="value">{{ getYear() }}</span>
+            </div>
+          </ion-col>
+          <ion-col size="12" *ngIf="getGenreDisplay()">
+            <div class="info-item">
+              <span class="label">Género:</span>
+              <span class="value">{{ getGenreDisplay() }}</span>
+            </div>
+          </ion-col>
+          <ion-col size="6" *ngIf="getRatingMean()">
+            <div class="info-item">
+              <span class="label">Rating:</span>
+              <span class="value">{{ getRatingMean() }}</span>
+            </div>
+          </ion-col>
+          <ion-col size="6" *ngIf="getRatingCount()">
+            <div class="info-item">
+              <span class="label">Votos:</span>
+              <span class="value">{{ getRatingCount() }}</span>
+            </div>
+          </ion-col>
+          <ion-col size="12" *ngIf="isAdultOnly()">
+            <div class="info-item">
+              <span class="label">Contenido:</span>
+              <span class="value adult-warning">🔞 Solo adultos (18+)</span>
+            </div>
+          </ion-col>
+          <ion-col size="12" *ngIf="getExternalLink()">
+            <div class="info-item">
+              <span class="label">Enlace:</span>
+              <a [href]="getExternalLink()" target="_blank" class="external-link">{{ getExternalLink() }}</a>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    
+    <h2>Descripción</h2>
+    <p class="description">{{ getDescription() }}</p>
+    <h2 *ngIf="getTags().length">Tags</h2>
+    <div class="tags" *ngIf="getTags().length">
+      <span class="tag" *ngFor="let t of getTags() | slice:0:20; trackBy: trackTag">{{ getTagName(t) }}</span>
+    </div>
+  </div>
+
+  <ng-template #skeleton>
+    <div class="hero skeleton-block"></div>
+    <div class="details">
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line short"></div>
+      <div class="skeleton-line"></div>
+    </div>
+  </ng-template>
+</ion-content>
