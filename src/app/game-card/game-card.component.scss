@@ -258,24 +258,76 @@ ion-card.game-card {
   .price {
     display: flex;
     align-items: center;
-    gap: .6rem;
-    padding: .5rem .8rem .7rem;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .6rem .8rem;
     margin-top: auto;
-    font-size: .85rem;
     font-weight: 600;
-    color: #beee11;
-    background: rgba(0,0,0,.2);
-    border-top: 1px solid rgba(255,255,255,.02);
+    background: linear-gradient(to bottom, rgba(0,0,0,.3) 0%, rgba(0,0,0,.4) 100%);
+    border-top: 1px solid rgba(255,255,255,.05);
+    flex-wrap: wrap;
+    min-height: 40px;
   }
+  
+  .price .final {
+    color: #beee11;
+    font-size: clamp(.9rem, 2.5vw, 1.1rem);
+    text-shadow: 0 1px 3px rgba(0,0,0,.8), 0 0 8px rgba(190,238,17,.3);
+    letter-spacing: .3px;
+    white-space: nowrap;
+  }
+  
   .price .final.free { 
     color: #5bb75b;
     text-shadow: 0 0 4px rgba(91,183,91,.3);
   }
+  
   .price .original {
     text-decoration: line-through;
     font-weight: 400;
     color: #738895;
-    font-size: .75rem;
+    font-size: clamp(.7rem, 2vw, .8rem);
+    white-space: nowrap;
+  }
+  
+  // Responsive price layout
+  @media (max-width: 768px) {
+    .price {
+      padding: .5rem .6rem;
+      gap: .4rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .price {
+      flex-direction: row;
+      align-items: center;
+      padding: .6rem .8rem;
+    }
+    
+    .price .final {
+      font-size: 1rem;
+    }
+    
+    .price .original {
+      font-size: .75rem;
+      margin-left: auto;
+    }
+  }
+  
+  // Support for very small screens
+  @media (max-width: 320px) {
+    .price {
+      padding: .5rem .6rem;
+    }
+    
+    .price .final {
+      font-size: .9rem;
+    }
+    
+    .price .original {
+      font-size: .7rem;
+    }
   }
 }
 
